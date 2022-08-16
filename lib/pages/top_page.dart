@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../pages/result_page.dart';
 
 class TopPage extends StatefulWidget {
   const TopPage({Key? key}) : super(key: key);
@@ -8,13 +9,40 @@ class TopPage extends StatefulWidget {
 }
 
 class _TopPageState extends State<TopPage> {
-  RangeValues _currentRangeValues = const RangeValues(100, 200);
+  String gender = 'male';
+  void setGender(String gender) {
+    setState(() {
+      this.gender = gender;
+    });
+  }
+
+  double height = 170.0;
+  void setHeight(double height) {
+    setState(() {
+      this.height = height;
+    });
+  }
+
+  int weight = 50;
+  void setWeight(int weight) {
+    setState(() {
+      this.weight = weight > 0 ? weight : 0;
+    });
+  }
+
+  int age = 20;
+  void setAge(int age) {
+    setState(() {
+      this.age = age > 0 ? age : 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BMI Calc'),
+        backgroundColor: Colors.red,
+        title: const Text('BMI CALC'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -33,12 +61,11 @@ class _TopPageState extends State<TopPage> {
                       children: [
                         InkWell(
                           splashColor: Colors.white,
-                          onTap: () {
-                            print('hello');
-                          },
+                          onTap: () => setGender('male'),
                           child: Ink(
                             decoration: BoxDecoration(
-                              color: Colors.black,
+                              color:
+                                  gender == 'male' ? Colors.grey : Colors.black,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Column(
@@ -52,7 +79,7 @@ class _TopPageState extends State<TopPage> {
                                 Text(
                                   'MALE',
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -62,12 +89,12 @@ class _TopPageState extends State<TopPage> {
                         ),
                         InkWell(
                           splashColor: Colors.white,
-                          onTap: () {
-                            print('hello');
-                          },
+                          onTap: () => setGender('female'),
                           child: Ink(
                             decoration: BoxDecoration(
-                              color: Colors.black,
+                              color: gender == 'female'
+                                  ? Colors.grey
+                                  : Colors.black,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Column(
@@ -81,7 +108,7 @@ class _TopPageState extends State<TopPage> {
                                 Text(
                                   'FEMALE',
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -112,23 +139,26 @@ class _TopPageState extends State<TopPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text(
-                          '173cm',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '$height',
+                                style: const TextStyle(fontSize: 40),
+                              ),
+                              const TextSpan(
+                                text: 'cm',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ],
                           ),
                         ),
-                        RangeSlider(
-                          values: _currentRangeValues,
-                          max: 200,
+                        Slider(
+                          value: height,
                           min: 100,
-                          onChanged: (RangeValues values) {
-                            setState(() {
-                              _currentRangeValues = values;
-                            });
-                          },
+                          max: 200,
+                          divisions: 100,
+                          onChanged: (double height) => setHeight(height),
                         ),
                       ],
                     ),
@@ -159,9 +189,9 @@ class _TopPageState extends State<TopPage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Text(
-                                '63',
-                                style: TextStyle(
+                              Text(
+                                '$weight',
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 40,
@@ -171,7 +201,7 @@ class _TopPageState extends State<TopPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => setWeight(++weight),
                                     iconSize: 40,
                                     icon: const Icon(
                                       Icons.add,
@@ -180,7 +210,7 @@ class _TopPageState extends State<TopPage> {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () => setWeight(--weight),
                                     iconSize: 40,
                                     icon: const Icon(
                                       Icons.remove,
@@ -208,9 +238,9 @@ class _TopPageState extends State<TopPage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Text(
-                                '29',
-                                style: TextStyle(
+                              Text(
+                                '$age',
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 40,
@@ -221,7 +251,7 @@ class _TopPageState extends State<TopPage> {
                                 children: [
                                   IconButton(
                                     iconSize: 40,
-                                    onPressed: () {},
+                                    onPressed: () => setAge(++age),
                                     icon: const Icon(
                                       Icons.add,
                                       color: Colors.white,
@@ -230,7 +260,7 @@ class _TopPageState extends State<TopPage> {
                                   ),
                                   IconButton(
                                     iconSize: 40,
-                                    onPressed: () {},
+                                    onPressed: () => setAge(--age),
                                     icon: const Icon(
                                       Icons.remove,
                                       color: Colors.white,
@@ -254,9 +284,17 @@ class _TopPageState extends State<TopPage> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.red,
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ResultPage(null, gender, height, weight, age),
+              ),
+            );
+          },
           child: const Text(
-            'Calc!',
+            'CALC!',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

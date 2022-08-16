@@ -1,7 +1,9 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import './pages/top_page.dart';
 
 void main() {
+  debugPaintSizeEnabled = true;
   runApp(const MyApp());
 }
 
